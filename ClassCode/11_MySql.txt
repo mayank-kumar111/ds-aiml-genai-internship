@@ -1,0 +1,584 @@
+
+Setting environment for using XAMPP for Windows.
+hello@DEEP c:\xampp
+# mysql -u root p
+ERROR 1049 (42000): Unknown database 'p'
+
+hello@DEEP c:\xampp
+# mysql -u root -p
+Enter password:
+Welcome to the MariaDB monitor.  Commands end with ; or \g.
+Your MariaDB connection id is 9
+Server version: 10.4.32-MariaDB mariadb.org binary distribution
+
+Copyright (c) 2000, 2018, Oracle, MariaDB Corporation Ab and others.
+
+Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
+
+MariaDB [(none)]> show databases;
++--------------------+
+| Database           |
++--------------------+
+| dsml_internship    |
+| information_schema |
+| mysql              |
+| performance_schema |
+| phpmyadmin         |
+| test               |
++--------------------+
+6 rows in set (0.053 sec)
+
+MariaDB [(none)]> use dsml_internship;
+Database changed
+MariaDB [dsml_internship]>
+MariaDB [dsml_internship]>
+MariaDB [dsml_internship]>
+MariaDB [dsml_internship]>
+MariaDB [dsml_internship]>
+MariaDB [dsml_internship]> show tables;
++---------------------------+
+| Tables_in_dsml_internship |
++---------------------------+
+| fees                      |
+| student                   |
++---------------------------+
+2 rows in set (0.001 sec)
+
+MariaDB [dsml_internship]>
+MariaDB [dsml_internship]>
+MariaDB [dsml_internship]>
+MariaDB [dsml_internship]>
+MariaDB [dsml_internship]>
+MariaDB [dsml_internship]>
+MariaDB [dsml_internship]>
+MariaDB [dsml_internship]> select * from student;
++-----+--------+------+
+| sid | name   | age  |
++-----+--------+------+
+| 101 | aman   |   23 |
+| 102 | rohan  |   25 |
+| 103 | deep   |   26 |
+| 104 | gaurav |   21 |
+| 105 | ram    |   21 |
++-----+--------+------+
+5 rows in set (0.062 sec)
+
+MariaDB [dsml_internship]> select * from fees;
++------+-------+----------+-------+
+| fid  | fees  | discount | paid  |
++------+-------+----------+-------+
+|  101 | 20000 |     1000 |  4000 |
+|  102 | 20000 |        0 |  6000 |
+|  103 | 30000 |     2000 |  8000 |
+|  104 | 25000 |        0 | 12000 |
+|  105 | 30000 |     1000 |  9000 |
++------+-------+----------+-------+
+5 rows in set (0.022 sec)
+
+MariaDB [dsml_internship]>
+MariaDB [dsml_internship]>
+MariaDB [dsml_internship]> -- foreign key
+MariaDB [dsml_internship]>
+MariaDB [dsml_internship]>
+MariaDB [dsml_internship]> alter table fees add foreign key(fid) references student(sid);
+Query OK, 5 rows affected (0.068 sec)
+Records: 5  Duplicates: 0  Warnings: 0
+
+MariaDB [dsml_internship]> desc student;
++-------+-----------+------+-----+---------+-------+
+| Field | Type      | Null | Key | Default | Extra |
++-------+-----------+------+-----+---------+-------+
+| sid   | int(5)    | NO   | PRI | NULL    |       |
+| name  | char(100) | YES  |     | NULL    |       |
+| age   | int(3)    | YES  |     | NULL    |       |
++-------+-----------+------+-----+---------+-------+
+3 rows in set (0.039 sec)
+
+MariaDB [dsml_internship]> desc fees;
++----------+--------+------+-----+---------+-------+
+| Field    | Type   | Null | Key | Default | Extra |
++----------+--------+------+-----+---------+-------+
+| fid      | int(5) | YES  | MUL | NULL    |       |
+| fees     | double | YES  |     | NULL    |       |
+| discount | double | YES  |     | NULL    |       |
+| paid     | double | YES  |     | NULL    |       |
++----------+--------+------+-----+---------+-------+
+4 rows in set (0.016 sec)
+
+MariaDB [dsml_internship]>
+MariaDB [dsml_internship]>
+MariaDB [dsml_internship]> create table address(aid int(4), city varchar(100) not null, state varcahr(100), foreign key(aid) references student(sid));
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near '(100), foreign key(aid) references student(sid))' at line 1
+MariaDB [dsml_internship]>
+MariaDB [dsml_internship]>
+MariaDB [dsml_internship]>
+MariaDB [dsml_internship]> create table address(aid int(4), city varchar(100) not null, state varchar(100), foreign key(aid) references student(sid));
+Query OK, 0 rows affected (0.030 sec)
+
+MariaDB [dsml_internship]> desc address;
++-------+--------------+------+-----+---------+-------+
+| Field | Type         | Null | Key | Default | Extra |
++-------+--------------+------+-----+---------+-------+
+| aid   | int(4)       | YES  | MUL | NULL    |       |
+| city  | varchar(100) | NO   |     | NULL    |       |
+| state | varchar(100) | YES  |     | NULL    |       |
++-------+--------------+------+-----+---------+-------+
+3 rows in set (0.036 sec)
+
+MariaDB [dsml_internship]> insert into address values(101, 'jaipur', 'raj'), (102, 'jaipur', 'raj');
+Query OK, 2 rows affected (0.051 sec)
+Records: 2  Duplicates: 0  Warnings: 0
+
+MariaDB [dsml_internship]> select * from address;
++------+--------+-------+
+| aid  | city   | state |
++------+--------+-------+
+|  101 | jaipur | raj   |
+|  102 | jaipur | raj   |
++------+--------+-------+
+2 rows in set (0.001 sec)
+
+MariaDB [dsml_internship]> insert into address values(106, 'jaipur', 'raj');
+ERROR 1452 (23000): Cannot add or update a child row: a foreign key constraint fails (`dsml_internship`.`address`, CONSTRAINT `address_ibfk_1` FOREIGN KEY (`aid`) REFERENCES `student` (`sid`))
+MariaDB [dsml_internship]>
+MariaDB [dsml_internship]>
+MariaDB [dsml_internship]>
+MariaDB [dsml_internship]>
+MariaDB [dsml_internship]>
+MariaDB [dsml_internship]>
+MariaDB [dsml_internship]>
+MariaDB [dsml_internship]>
+MariaDB [dsml_internship]>
+MariaDB [dsml_internship]> -- joins
+MariaDB [dsml_internship]>
+MariaDB [dsml_internship]>
+MariaDB [dsml_internship]>
+MariaDB [dsml_internship]> -- inner join
+MariaDB [dsml_internship]> -- left join
+MariaDB [dsml_internship]> -- right join
+MariaDB [dsml_internship]> -- cross join
+MariaDB [dsml_internship]>
+MariaDB [dsml_internship]>
+MariaDB [dsml_internship]> -- drop
+MariaDB [dsml_internship]> -- delete
+MariaDB [dsml_internship]> -- truncate
+MariaDB [dsml_internship]>
+MariaDB [dsml_internship]>
+MariaDB [dsml_internship]>
+MariaDB [dsml_internship]> -- joins
+MariaDB [dsml_internship]>
+MariaDB [dsml_internship]>
+MariaDB [dsml_internship]> select * from student;
++-----+--------+------+
+| sid | name   | age  |
++-----+--------+------+
+| 101 | aman   |   23 |
+| 102 | rohan  |   25 |
+| 103 | deep   |   26 |
+| 104 | gaurav |   21 |
+| 105 | ram    |   21 |
++-----+--------+------+
+5 rows in set (0.001 sec)
+
+MariaDB [dsml_internship]> select * from fees;
++------+-------+----------+-------+
+| fid  | fees  | discount | paid  |
++------+-------+----------+-------+
+|  101 | 20000 |     1000 |  4000 |
+|  102 | 20000 |        0 |  6000 |
+|  103 | 30000 |     2000 |  8000 |
+|  104 | 25000 |        0 | 12000 |
+|  105 | 30000 |     1000 |  9000 |
++------+-------+----------+-------+
+5 rows in set (0.000 sec)
+
+MariaDB [dsml_internship]> insert into student values(106, 'himanshu', 23),(107, 'rajesh', 22);
+Query OK, 2 rows affected (0.003 sec)
+Records: 2  Duplicates: 0  Warnings: 0
+
+MariaDB [dsml_internship]> select * from student;
++-----+----------+------+
+| sid | name     | age  |
++-----+----------+------+
+| 101 | aman     |   23 |
+| 102 | rohan    |   25 |
+| 103 | deep     |   26 |
+| 104 | gaurav   |   21 |
+| 105 | ram      |   21 |
+| 106 | himanshu |   23 |
+| 107 | rajesh   |   22 |
++-----+----------+------+
+7 rows in set (0.000 sec)
+
+MariaDB [dsml_internship]> select * from fees;
++------+-------+----------+-------+
+| fid  | fees  | discount | paid  |
++------+-------+----------+-------+
+|  101 | 20000 |     1000 |  4000 |
+|  102 | 20000 |        0 |  6000 |
+|  103 | 30000 |     2000 |  8000 |
+|  104 | 25000 |        0 | 12000 |
+|  105 | 30000 |     1000 |  9000 |
++------+-------+----------+-------+
+5 rows in set (0.001 sec)
+
+MariaDB [dsml_internship]> -- inner join
+MariaDB [dsml_internship]>
+MariaDB [dsml_internship]> select * from student inner join fees on student.sid = fees.fid;
++-----+--------+------+------+-------+----------+-------+
+| sid | name   | age  | fid  | fees  | discount | paid  |
++-----+--------+------+------+-------+----------+-------+
+| 101 | aman   |   23 |  101 | 20000 |     1000 |  4000 |
+| 102 | rohan  |   25 |  102 | 20000 |        0 |  6000 |
+| 103 | deep   |   26 |  103 | 30000 |     2000 |  8000 |
+| 104 | gaurav |   21 |  104 | 25000 |        0 | 12000 |
+| 105 | ram    |   21 |  105 | 30000 |     1000 |  9000 |
++-----+--------+------+------+-------+----------+-------+
+5 rows in set (0.001 sec)
+
+MariaDB [dsml_internship]> select name,fees,paid from student inner join fees on student.sid = fees.fid;
++--------+-------+-------+
+| name   | fees  | paid  |
++--------+-------+-------+
+| aman   | 20000 |  4000 |
+| rohan  | 20000 |  6000 |
+| deep   | 30000 |  8000 |
+| gaurav | 25000 | 12000 |
+| ram    | 30000 |  9000 |
++--------+-------+-------+
+5 rows in set (0.000 sec)
+
+MariaDB [dsml_internship]> -- left join
+MariaDB [dsml_internship]>
+MariaDB [dsml_internship]> select * from student left join fees on student.sid = fees.fid;
++-----+----------+------+------+-------+----------+-------+
+| sid | name     | age  | fid  | fees  | discount | paid  |
++-----+----------+------+------+-------+----------+-------+
+| 101 | aman     |   23 |  101 | 20000 |     1000 |  4000 |
+| 102 | rohan    |   25 |  102 | 20000 |        0 |  6000 |
+| 103 | deep     |   26 |  103 | 30000 |     2000 |  8000 |
+| 104 | gaurav   |   21 |  104 | 25000 |        0 | 12000 |
+| 105 | ram      |   21 |  105 | 30000 |     1000 |  9000 |
+| 106 | himanshu |   23 | NULL |  NULL |     NULL |  NULL |
+| 107 | rajesh   |   22 | NULL |  NULL |     NULL |  NULL |
++-----+----------+------+------+-------+----------+-------+
+7 rows in set (0.001 sec)
+
+MariaDB [dsml_internship]> select * from student right join fees on student.sid = fees.fid;
++------+--------+------+------+-------+----------+-------+
+| sid  | name   | age  | fid  | fees  | discount | paid  |
++------+--------+------+------+-------+----------+-------+
+|  101 | aman   |   23 |  101 | 20000 |     1000 |  4000 |
+|  102 | rohan  |   25 |  102 | 20000 |        0 |  6000 |
+|  103 | deep   |   26 |  103 | 30000 |     2000 |  8000 |
+|  104 | gaurav |   21 |  104 | 25000 |        0 | 12000 |
+|  105 | ram    |   21 |  105 | 30000 |     1000 |  9000 |
++------+--------+------+------+-------+----------+-------+
+5 rows in set (0.001 sec)
+
+MariaDB [dsml_internship]>
+MariaDB [dsml_internship]>
+MariaDB [dsml_internship]> -- cross join
+MariaDB [dsml_internship]>
+MariaDB [dsml_internship]> select * from student;
++-----+----------+------+
+| sid | name     | age  |
++-----+----------+------+
+| 101 | aman     |   23 |
+| 102 | rohan    |   25 |
+| 103 | deep     |   26 |
+| 104 | gaurav   |   21 |
+| 105 | ram      |   21 |
+| 106 | himanshu |   23 |
+| 107 | rajesh   |   22 |
++-----+----------+------+
+7 rows in set (0.001 sec)
+
+MariaDB [dsml_internship]> select * from fees;
++------+-------+----------+-------+
+| fid  | fees  | discount | paid  |
++------+-------+----------+-------+
+|  101 | 20000 |     1000 |  4000 |
+|  102 | 20000 |        0 |  6000 |
+|  103 | 30000 |     2000 |  8000 |
+|  104 | 25000 |        0 | 12000 |
+|  105 | 30000 |     1000 |  9000 |
++------+-------+----------+-------+
+5 rows in set (0.000 sec)
+
+MariaDB [dsml_internship]> select * from student cross join fees;
++-----+----------+------+------+-------+----------+-------+
+| sid | name     | age  | fid  | fees  | discount | paid  |
++-----+----------+------+------+-------+----------+-------+
+| 101 | aman     |   23 |  101 | 20000 |     1000 |  4000 |
+| 101 | aman     |   23 |  102 | 20000 |        0 |  6000 |
+| 101 | aman     |   23 |  103 | 30000 |     2000 |  8000 |
+| 101 | aman     |   23 |  104 | 25000 |        0 | 12000 |
+| 101 | aman     |   23 |  105 | 30000 |     1000 |  9000 |
+| 102 | rohan    |   25 |  101 | 20000 |     1000 |  4000 |
+| 102 | rohan    |   25 |  102 | 20000 |        0 |  6000 |
+| 102 | rohan    |   25 |  103 | 30000 |     2000 |  8000 |
+| 102 | rohan    |   25 |  104 | 25000 |        0 | 12000 |
+| 102 | rohan    |   25 |  105 | 30000 |     1000 |  9000 |
+| 103 | deep     |   26 |  101 | 20000 |     1000 |  4000 |
+| 103 | deep     |   26 |  102 | 20000 |        0 |  6000 |
+| 103 | deep     |   26 |  103 | 30000 |     2000 |  8000 |
+| 103 | deep     |   26 |  104 | 25000 |        0 | 12000 |
+| 103 | deep     |   26 |  105 | 30000 |     1000 |  9000 |
+| 104 | gaurav   |   21 |  101 | 20000 |     1000 |  4000 |
+| 104 | gaurav   |   21 |  102 | 20000 |        0 |  6000 |
+| 104 | gaurav   |   21 |  103 | 30000 |     2000 |  8000 |
+| 104 | gaurav   |   21 |  104 | 25000 |        0 | 12000 |
+| 104 | gaurav   |   21 |  105 | 30000 |     1000 |  9000 |
+| 105 | ram      |   21 |  101 | 20000 |     1000 |  4000 |
+| 105 | ram      |   21 |  102 | 20000 |        0 |  6000 |
+| 105 | ram      |   21 |  103 | 30000 |     2000 |  8000 |
+| 105 | ram      |   21 |  104 | 25000 |        0 | 12000 |
+| 105 | ram      |   21 |  105 | 30000 |     1000 |  9000 |
+| 106 | himanshu |   23 |  101 | 20000 |     1000 |  4000 |
+| 106 | himanshu |   23 |  102 | 20000 |        0 |  6000 |
+| 106 | himanshu |   23 |  103 | 30000 |     2000 |  8000 |
+| 106 | himanshu |   23 |  104 | 25000 |        0 | 12000 |
+| 106 | himanshu |   23 |  105 | 30000 |     1000 |  9000 |
+| 107 | rajesh   |   22 |  101 | 20000 |     1000 |  4000 |
+| 107 | rajesh   |   22 |  102 | 20000 |        0 |  6000 |
+| 107 | rajesh   |   22 |  103 | 30000 |     2000 |  8000 |
+| 107 | rajesh   |   22 |  104 | 25000 |        0 | 12000 |
+| 107 | rajesh   |   22 |  105 | 30000 |     1000 |  9000 |
++-----+----------+------+------+-------+----------+-------+
+35 rows in set (0.001 sec)
+
+MariaDB [dsml_internship]>
+MariaDB [dsml_internship]>
+MariaDB [dsml_internship]>
+MariaDB [dsml_internship]> -- drop
+MariaDB [dsml_internship]> -- delete
+MariaDB [dsml_internship]> -- truncate
+MariaDB [dsml_internship]>
+MariaDB [dsml_internship]>
+MariaDB [dsml_internship]>
+MariaDB [dsml_internship]> show tables;
++---------------------------+
+| Tables_in_dsml_internship |
++---------------------------+
+| address                   |
+| fees                      |
+| student                   |
++---------------------------+
+3 rows in set (0.001 sec)
+
+MariaDB [dsml_internship]> show databases;
++--------------------+
+| Database           |
++--------------------+
+| dsml_internship    |
+| information_schema |
+| mysql              |
+| performance_schema |
+| phpmyadmin         |
+| test               |
++--------------------+
+6 rows in set (0.001 sec)
+
+MariaDB [dsml_internship]> create database new;
+Query OK, 1 row affected (0.002 sec)
+
+MariaDB [dsml_internship]> show databases;
++--------------------+
+| Database           |
++--------------------+
+| dsml_internship    |
+| information_schema |
+| mysql              |
+| new                |
+| performance_schema |
+| phpmyadmin         |
+| test               |
++--------------------+
+7 rows in set (0.001 sec)
+
+MariaDB [dsml_internship]> drop database new;
+Query OK, 0 rows affected (0.044 sec)
+
+MariaDB [dsml_internship]> show databases;
++--------------------+
+| Database           |
++--------------------+
+| dsml_internship    |
+| information_schema |
+| mysql              |
+| performance_schema |
+| phpmyadmin         |
+| test               |
++--------------------+
+6 rows in set (0.001 sec)
+
+MariaDB [dsml_internship]> show tables;
++---------------------------+
+| Tables_in_dsml_internship |
++---------------------------+
+| address                   |
+| fees                      |
+| student                   |
++---------------------------+
+3 rows in set (0.001 sec)
+
+MariaDB [dsml_internship]> select * from student;
++-----+----------+------+
+| sid | name     | age  |
++-----+----------+------+
+| 101 | aman     |   23 |
+| 102 | rohan    |   25 |
+| 103 | deep     |   26 |
+| 104 | gaurav   |   21 |
+| 105 | ram      |   21 |
+| 106 | himanshu |   23 |
+| 107 | rajesh   |   22 |
++-----+----------+------+
+7 rows in set (0.001 sec)
+
+MariaDB [dsml_internship]> -- copy
+MariaDB [dsml_internship]>
+MariaDB [dsml_internship]> create table new as select * from student;
+Query OK, 7 rows affected (0.031 sec)
+Records: 7  Duplicates: 0  Warnings: 0
+
+MariaDB [dsml_internship]> show tables;
++---------------------------+
+| Tables_in_dsml_internship |
++---------------------------+
+| address                   |
+| fees                      |
+| new                       |
+| student                   |
++---------------------------+
+4 rows in set (0.001 sec)
+
+MariaDB [dsml_internship]> select * from new;
++-----+----------+------+
+| sid | name     | age  |
++-----+----------+------+
+| 101 | aman     |   23 |
+| 102 | rohan    |   25 |
+| 103 | deep     |   26 |
+| 104 | gaurav   |   21 |
+| 105 | ram      |   21 |
+| 106 | himanshu |   23 |
+| 107 | rajesh   |   22 |
++-----+----------+------+
+7 rows in set (0.001 sec)
+
+MariaDB [dsml_internship]> desc new;
++-------+-----------+------+-----+---------+-------+
+| Field | Type      | Null | Key | Default | Extra |
++-------+-----------+------+-----+---------+-------+
+| sid   | int(5)    | NO   |     | NULL    |       |
+| name  | char(100) | YES  |     | NULL    |       |
+| age   | int(3)    | YES  |     | NULL    |       |
++-------+-----------+------+-----+---------+-------+
+3 rows in set (0.017 sec)
+
+MariaDB [dsml_internship]> drop table new;
+Query OK, 0 rows affected (0.007 sec)
+
+MariaDB [dsml_internship]> show tables;
++---------------------------+
+| Tables_in_dsml_internship |
++---------------------------+
+| address                   |
+| fees                      |
+| student                   |
++---------------------------+
+3 rows in set (0.001 sec)
+
+MariaDB [dsml_internship]> create table new as select * from student;
+Query OK, 7 rows affected (0.011 sec)
+Records: 7  Duplicates: 0  Warnings: 0
+
+MariaDB [dsml_internship]> show tables;
++---------------------------+
+| Tables_in_dsml_internship |
++---------------------------+
+| address                   |
+| fees                      |
+| new                       |
+| student                   |
++---------------------------+
+4 rows in set (0.001 sec)
+
+MariaDB [dsml_internship]> -- delete
+MariaDB [dsml_internship]> select * from new;
++-----+----------+------+
+| sid | name     | age  |
++-----+----------+------+
+| 101 | aman     |   23 |
+| 102 | rohan    |   25 |
+| 103 | deep     |   26 |
+| 104 | gaurav   |   21 |
+| 105 | ram      |   21 |
+| 106 | himanshu |   23 |
+| 107 | rajesh   |   22 |
++-----+----------+------+
+7 rows in set (0.000 sec)
+
+MariaDB [dsml_internship]> delete from new where sid in (103, 107);
+Query OK, 2 rows affected (0.020 sec)
+
+MariaDB [dsml_internship]> select * from new;
++-----+----------+------+
+| sid | name     | age  |
++-----+----------+------+
+| 101 | aman     |   23 |
+| 102 | rohan    |   25 |
+| 104 | gaurav   |   21 |
+| 105 | ram      |   21 |
+| 106 | himanshu |   23 |
++-----+----------+------+
+5 rows in set (0.000 sec)
+
+MariaDB [dsml_internship]> -- truncate
+MariaDB [dsml_internship]>
+MariaDB [dsml_internship]> truncate new;
+Query OK, 0 rows affected (0.033 sec)
+
+MariaDB [dsml_internship]> select * from new;
+Empty set (0.001 sec)
+
+MariaDB [dsml_internship]>
+MariaDB [dsml_internship]> show tables;
++---------------------------+
+| Tables_in_dsml_internship |
++---------------------------+
+| address                   |
+| fees                      |
+| new                       |
+| student                   |
++---------------------------+
+4 rows in set (0.001 sec)
+
+MariaDB [dsml_internship]> select * from new;
+Empty set (0.000 sec)
+
+MariaDB [dsml_internship]> desc new;
++-------+-----------+------+-----+---------+-------+
+| Field | Type      | Null | Key | Default | Extra |
++-------+-----------+------+-----+---------+-------+
+| sid   | int(5)    | NO   |     | NULL    |       |
+| name  | char(100) | YES  |     | NULL    |       |
+| age   | int(3)    | YES  |     | NULL    |       |
++-------+-----------+------+-----+---------+-------+
+3 rows in set (0.035 sec)
+
+MariaDB [dsml_internship]>
+MariaDB [dsml_internship]>
+MariaDB [dsml_internship]>
+MariaDB [dsml_internship]>
+MariaDB [dsml_internship]> -- python database connectivity
+MariaDB [dsml_internship]>
+MariaDB [dsml_internship]>
+MariaDB [dsml_internship]>
+MariaDB [dsml_internship]>
+MariaDB [dsml_internship]>
+MariaDB [dsml_internship]>
+MariaDB [dsml_internship]>
+MariaDB [dsml_internship]>

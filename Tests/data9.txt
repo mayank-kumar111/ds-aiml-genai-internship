@@ -1,0 +1,4 @@
+Item,Cost,Quantity
+Laptop,999.99,1
+Mouse,25.50,2
+Keyboard,45.99,1
